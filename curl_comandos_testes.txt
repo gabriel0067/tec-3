@@ -1,0 +1,41 @@
+curl CMD
+
+# 1. Cadastrar 2 pessoas
+curl -X POST http://localhost:3001/pessoas -H "Content-Type: application/json" -d "{\"nome\":\"Ana Silva\",\"idade\":20,\"email\":\"ana@etec.sp.gov.br\",\"fone\":\"11912345678\"}"
+
+curl -X POST http://localhost:3001/pessoas -H "Content-Type: application/json" -d "{\"nome\":\"Carlos Souza\",\"idade\":22,\"email\":\"carlos@fatec.sp.gov.br\",\"fone\":\"11987654321\"}"
+
+# 2. Cadastrar 2 estudantes relacionados com as pessoas (substitua os IDs pelas respostas dos cadastros de pessoas)
+curl -X POST http://localhost:3001/estudantes -H "Content-Type: application/json" -d "{\"ra\":1001,\"media\":8.5,\"pessoa\":\"ID_PESSOA_1\"}"
+
+curl -X POST http://localhost:3001/estudantes -H "Content-Type: application/json" -d "{\"ra\":1002,\"media\":7.2,\"pessoa\":\"ID_PESSOA_2\"}"
+
+# 3. Cadastrar 2 disciplinas
+curl -X POST http://localhost:3001/disciplinas -H "Content-Type: application/json" -d "{\"descricao\":\"Matemática Aplicada\",\"curso\":\"Engenharia\",\"semestre\":3}"
+
+curl -X POST http://localhost:3001/disciplinas -H "Content-Type: application/json" -d "{\"descricao\":\"Programação Web\",\"curso\":\"Informática\",\"semestre\":2}"
+
+# 4. Alterar o cadastro de 1 pessoa (substitua ID_PESSOA_1)
+curl -X PUT http://localhost:3001/pessoas/ID_PESSOA_1 -H "Content-Type: application/json" -d "{\"nome\":\"Ana Beatriz Silva\",\"idade\":21}"
+
+# 5. Alterar o cadastro de 1 estudante (substitua ID_ESTUDANTE_1)
+curl -X PUT http://localhost:3001/estudantes/ID_ESTUDANTE_1 -H "Content-Type: application/json" -d "{\"media\":9.2}"
+
+# 6. Alterar o cadastro de 1 disciplina (substitua ID_DISCIPLINA_1)
+curl -X PUT http://localhost:3001/disciplinas/ID_DISCIPLINA_1 -H "Content-Type: application/json" -d "{\"descricao\":\"Matemática Avançada\"}"
+
+# 7. Listar as pessoas
+curl http://localhost:3001/pessoas
+
+# 8. Listar os estudantes associados às suas pessoas
+curl http://localhost:3001/estudantes
+
+# 9. Listar as disciplinas
+curl http://localhost:3001/disciplinas
+
+# 10. Excluir 1 estudante (ID_ESTUDANTE_2) e a pessoa relacionada (ID_PESSOA_2)
+curl -X DELETE http://localhost:3001/estudantes/ID_ESTUDANTE_2
+curl -X DELETE http://localhost:3001/pessoas/ID_PESSOA_2
+
+# 11. Excluir 1 disciplina (ID_DISCIPLINA_2)
+curl -X DELETE http://localhost:3001/disciplinas/ID_DISCIPLINA_2

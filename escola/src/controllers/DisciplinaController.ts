@@ -1,61 +1,42 @@
 import { Request, Response } from 'express';
-import { Disciplina } from '../models';
-class DisciplinaController {
-  public async create(req: Request, res: Response): Promise<any> {
-    const { descricao } = req.body;
+import { Disciplina } from '../models/Disciplina';
+
+export const DisciplinaController = {
+  async create(req: Request, res: Response) {
     try {
-      //a instância de um modelo é chamada de documento
-      const document = new Disciplina({ descricao });
-      // ao salvar serão aplicadas as validações do esquema
-      const resp = await document.save();
-      return res.json(resp);
-    } catch (error: any) {
-      if (error && error.errors['descricao']) {
-        return res.json({ message: error.errors['descricao'].message });
-      }
-      return res.json({ message: error.message });
+      const disciplina = await Disciplina.create(req.body);
+      res.status(201).json(disciplina);
+    } catch (err: any) {
+      res.status(400).json({ erro: err.message });
+    }
+  },
+
+  async list(req: Request, res: Response) {
+    try {
+      const disciplinas = await Disciplina.find().sort({ descricao: 1 });
+      res.status(200).json(disciplinas);
+    } catch (err: any) {
+      res.status(500).json({ erro: err.message });
+    }
+  },
+
+  async delete(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+      await Disciplina.findByIdAndDelete(id);
+      res.sendStatus(204);
+    } catch (err: any) {
+      res.status(400).json({ erro: err.message });
+    }
+  },
+
+  async update(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+      const disciplinaAtualizada = await Disciplina.findByIdAndUpdate(id, req.body, { new: true });
+      res.status(200).json(disciplinaAtualizada);
+    } catch (err: any) {
+      res.status(400).json({ erro: err.message });
     }
   }
-  public async list(_: Request, res: Response): Promise<any> {
-    try {
-      const objects = await Disciplina.find().sort({ mail: 'asc' });
-      return res.json(objects);
-    } catch (error: any) {
-      return res.json({ message: error.message });
-    }
-  }
-  public async delete(req: Request, res: Response): Promise<any> {
-    const { id: _id } = req.body; // _id do registro a ser excluído
-    try {
-      const object = await Disciplina.findByIdAndDelete(_id);
-      if (object) {
-        return res.json({ message: 'Disciplina excluída com sucesso' });
-      } else {
-        return res.json({ message: 'Disciplina inexistente' });
-      }
-    } catch (error: any) {
-      return res.json({ message: error.message });
-    }
-  }
-  public async update(req: Request, res: Response): Promise<any> {
-    const { id, descricao } = req.body;
-    try {
-      // busca o documento existente na coleção antes de fazer o update
-      const document = await Disciplina.findById(id);
-      if (!document) {
-        return res.json({ message: 'Disciplina inexistente' });
-      }
-      // atualiza os campos
-      document.descricao = descricao;
-      // ao salvar serão aplicadas as validações do esquema
-      const resp = await document.save();
-      return res.json(resp);
-    } catch (error: any) {
-      if (error && error.errors['descricao']) {
-        return res.json({ message: error.errors['descricao'].message });
-      }
-      return res.json({ message: error.message });
-    }
-  }
-}
-export default new DisciplinaController();
+};

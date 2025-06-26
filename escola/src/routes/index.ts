@@ -1,11 +1,26 @@
-import { Router, Request, Response } from "express";
-import professor from './professores';
-import disciplina from './disciplinas';
-import professor_has_disciplina from './professor_has_disciplinas';
-const routes = Router();
-routes.use("/professor", professor);
-routes.use("/disciplina", disciplina);
-routes.use("/professor_has_disciplina", professor_has_disciplina);
-//aceita qualquer método HTTP ou URL
-routes.use((_: any, res: any) => res.json({ error: "Requisição desconhecida" }));
-export default routes;
+import { Router } from 'express';
+import { PessoaController } from '../controllers/PessoaController';
+import { EstudanteController } from '../controllers/EstudanteController';
+import { DisciplinaController } from '../controllers/DisciplinaController';
+
+const router = Router();
+
+// Rotas Pessoa
+router.post('/pessoas', PessoaController.create);
+router.get('/pessoas', PessoaController.list);
+router.delete('/pessoas/:id', PessoaController.delete);
+router.put('/pessoas/:id', PessoaController.update);
+
+// Rotas Estudante
+router.post('/estudantes', EstudanteController.create);
+router.get('/estudantes', EstudanteController.list);
+router.delete('/estudantes/:id', EstudanteController.delete);
+router.put('/estudantes/:id', EstudanteController.update);
+
+// Rotas Disciplina
+router.post('/disciplinas', DisciplinaController.create);
+router.get('/disciplinas', DisciplinaController.list);
+router.delete('/disciplinas/:id', DisciplinaController.delete);
+router.put('/disciplinas/:id', DisciplinaController.update);
+
+export default router;
